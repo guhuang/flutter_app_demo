@@ -11,34 +11,51 @@ import '../models/repo.dart';
 class Http {
   BuildContext context;
   Options _options;
+  String url;
+  Map<String, dynamic> params;
+  String method;
+  String tip;
   Http([this.context]) {
     _options = Options(extra: {"context": context});
   }
   static Dio dio = new Dio(BaseOptions(
-    baseUrl: 'https://api.github.com/',
-    headers: {
-      HttpHeaders.acceptHeader: "application/vnd.github.squirrel-girl-preview,"
-          "application/vnd.github.symmetra-preview+json",
-    },
+    baseUrl: 'http://t.weather.sojson.com', // 聚合数据历史天气接口
+    headers: {},
   ));
 
   static void init() {
-    // 添加缓存插件
-    dio.interceptors.add(Global.netCache);
+    dio.interceptors.add(InterceptorsWrapper(
+      onRequest: (RequestOptions options) async {
+        return options;
+      },
+      onResponse: (Response response) async {
+        return response.data;
+      },
+      onError: (DioError e) async {
+        // Do something with response error
+        return  e;//continue
+      }
+    ));
     // 设置用户token（可能为null，代表未登录）
     dio.options.headers[HttpHeaders.authorizationHeader] = Global.profile.token;
+  }
 
-    // 在调试模式下需要抓包调试，所以我们使用代理，并禁用HTTPS证书校验
-    if (!Global.isRelease) {
-      (dio.httpClientAdapter as DefaultHttpClientAdapter).onHttpClientCreate =
-          (client) {
-        client.findProxy = (uri) {
-          return "PROXY 10.1.10.250:8888";
-        };
-        //代理工具会提供一个抓包的自签名证书，会通不过证书校验，所以我们禁用证书校验
-        client.badCertificateCallback =
-            (X509Certificate cert, String host, int port) => true;
-      };
+  request (String url, {Map<String, dynamic> params, String method = 'POST', String tip = '', Map<String, dynamic> options}) async {
+    var response;
+    if (method.toLowerCase() == 'get') {
+      response = await dio.get(
+        url,
+        queryParameters: params,
+        options: _options
+      );
+      return response;
+    } else {
+      response = await dio.post(
+        url,
+        data: params,
+        options: _options
+      );
+      return response;
     }
   }
 

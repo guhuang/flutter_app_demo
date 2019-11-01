@@ -37,15 +37,20 @@ class MyDrawer extends StatelessWidget {
               children: <Widget>[
                 Padding(
                   padding: const EdgeInsets.symmetric(horizontal: 16.0),
-                  child: ClipOval(
-                    // 如果已登录，则显示用户头像；若未登录，则显示默认头像
-                    child: value.isLogin
-                        ? gmAvatar(value.githubUser.avatar_url, width: 80)
-                        : Image.asset(
-                      "imgs/avatar-default.png",
-                      width: 80,
-                    ),
+                  child: gmAvatar(
+                    value.isLogin ? value.githubUser.avatar_url : '',
+                    borderRadius: BorderRadius.circular(50),
                   ),
+//                  child: ClipOval(
+//                    // 如果已登录，则显示用户头像；若未登录，则显示默认头像
+//                    child: value.isLogin
+//                      ? gmAvatar(value.githubUser.avatar_url, width: 80)
+//                      : Image.asset(
+//                          "imgs/01.jpg",
+//                          width: 80,
+//                          fit: BoxFit.contain,
+//                        ),
+//                  ),
                 ),
                 Text(
                   value.isLogin

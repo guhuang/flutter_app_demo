@@ -1,11 +1,8 @@
 import 'package:flutter/material.dart';
-import 'package:provider/provider.dart';
-import 'package:flukit/flukit.dart';
-import '../../states/profileChangeNotifier.dart';
-import '../../models/repo.dart';
-import '../../common/http.dart';
+import 'package:flutter_app_demo/routes/homePage/job.dart';
+import 'package:flutter_app_demo/routes/homePage/my_page.dart';
+import 'package:flutter_app_demo/routes/homePage/resume.dart';
 import 'my_drawer.dart';
-import 'reop_item.dart';
 
 class HomeRoute extends StatefulWidget {
   @override
@@ -13,49 +10,53 @@ class HomeRoute extends StatefulWidget {
 }
 
 class _HomeRouteState extends State<HomeRoute> {
+  final _defaultColor = Colors.grey;
+  final _activeColor = Colors.blue;
+  int _currentIndex = 0;
+  final List<Widget> _widgetOptions = <Widget>[
+    Job(),
+    Resume(),
+    MyPage()
+  ];
+  final PageController _controller = PageController(
+    initialPage: 0,
+  );
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(
-//        title: Text(GmLocalizations.of(context).home),
-        title: Text('Github客户端'),
-      ),
-      body: _buildBody(), // 构建主页面
-      drawer: MyDrawer(), //抽屉菜单
-    );
-  }
-  Widget _buildBody() {
-    GithubUserModel userModel = Provider.of<GithubUserModel>(context);
-    if (!userModel.isLogin) {
-      //用户未登录，显示登录按钮
-      return Center(
-        child: RaisedButton(
-//          child: Text(GmLocalizations.of(context).login),
-          child: Text('登录'),
-          onPressed: () => Navigator.of(context).pushNamed("login"),
+    return Padding(
+      padding: EdgeInsets.only(top: 0),
+      child: Scaffold(
+        body: Center(
+          child: _widgetOptions.elementAt(_currentIndex),
         ),
-      );
-    } else {
-      //已登录，则展示项目列表
-      return InfiniteListView<Repo>(
-        onRetrieveData: (int page, List<Repo> items, bool refresh) async {
-          var data = await Http(context).getRepos(
-            refresh: refresh,
-            queryParameters: {
-              'page': page,
-              'page_size': 20,
+          drawer: MyDrawer(), //抽屉菜单
+          bottomNavigationBar: BottomNavigationBar(
+            currentIndex: _currentIndex,
+            onTap: (index) {
+              setState(() {
+                _currentIndex = index;
+              });
             },
-          );
-          //把请求到的新数据添加到items中
-          items.addAll(data);
-          // 如果接口返回的数量等于'page_size'，则认为还有数据，反之则认为最后一页
-          return data.length==20;
-        },
-        itemBuilder: (List list, int index, BuildContext ctx) {
-          // 项目信息列表项
-          return RepoItem(list[index]);
-        },
-      );
-    }
+            type: BottomNavigationBarType.fixed,
+            items: [
+              BottomNavigationBarItem(
+                icon: Icon(Icons.home, color: _defaultColor),
+                activeIcon: Icon(Icons.home, color: _activeColor),
+                title: Text('职位')
+              ),
+              BottomNavigationBarItem(
+                icon: Icon(Icons.search, color: _defaultColor),
+                activeIcon: Icon(Icons.search, color: _activeColor),
+                title: Text('简历')
+              ),
+              BottomNavigationBarItem(
+                icon: Icon(Icons.account_circle, color: _defaultColor),
+                activeIcon: Icon(Icons.account_circle, color: _activeColor),
+                title: Text('我的')
+              )
+            ]
+          )
+      ),
+    );
   }
 }

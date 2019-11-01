@@ -39,10 +39,11 @@ class _LoginRouteState extends State<LoginRoute> {
           child: Column(
             children: <Widget>[
               TextFormField(
-                  autofocus: _nameAutoFocus,
+                  autocorrect: false,
+//                  autofocus: _nameAutoFocus,
                   controller: _unameController,
                   decoration: InputDecoration(
-                    labelText: '用户名',
+//                    labelText: '用户名',
                     hintText: '填写账号或邮箱',
                     prefixIcon: Icon(Icons.person),
                   ),
@@ -51,10 +52,11 @@ class _LoginRouteState extends State<LoginRoute> {
                     return v.trim().isNotEmpty ? null : '用户名不能为空';
                   }),
               TextFormField(
+                autocorrect: false,
                 controller: _pwdController,
-                autofocus: !_nameAutoFocus,
+//                autofocus: !_nameAutoFocus,
                 decoration: InputDecoration(
-                    labelText: '密码',
+//                    labelText: '密码',
                     hintText: '密码',
                     prefixIcon: Icon(Icons.lock),
                     suffixIcon: IconButton(
