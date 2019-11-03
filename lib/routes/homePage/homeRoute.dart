@@ -1,7 +1,10 @@
+import 'dart:io';
+import 'dart:convert';
 import 'package:flutter/material.dart';
 import 'package:flutter_app_demo/routes/homePage/job.dart';
 import 'package:flutter_app_demo/routes/homePage/my_page.dart';
-import 'package:flutter_app_demo/routes/homePage/resume.dart';
+import 'package:flutter_app_demo/routes/homePage/resume/resume.dart';
+import 'package:path_provider/path_provider.dart';
 import 'my_drawer.dart';
 
 class HomeRoute extends StatefulWidget {
@@ -21,6 +24,13 @@ class _HomeRouteState extends State<HomeRoute> {
   final PageController _controller = PageController(
     initialPage: 0,
   );
+
+  @override
+  void initState() {
+    // TODO: implement initState
+    super.initState();
+  }
+
   @override
   Widget build(BuildContext context) {
     return Padding(

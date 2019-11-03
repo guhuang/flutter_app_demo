@@ -19,7 +19,7 @@ class Http {
     _options = Options(extra: {"context": context});
   }
   static Dio dio = new Dio(BaseOptions(
-    baseUrl: 'http://t.weather.sojson.com', // 聚合数据历史天气接口
+    baseUrl: 'http://zuowen.api.juhe.cn', // 聚合数据历史天气接口
     headers: {},
   ));
 
@@ -29,7 +29,7 @@ class Http {
         return options;
       },
       onResponse: (Response response) async {
-        return response.data;
+        return response;
       },
       onError: (DioError e) async {
         // Do something with response error
