@@ -40,7 +40,40 @@ class Http {
     dio.options.headers[HttpHeaders.authorizationHeader] = Global.profile.token;
   }
 
-  request (String url, {Map<String, dynamic> params, String method = 'POST', String tip = '', Map<String, dynamic> options}) async {
+  merge ({
+    String method,
+    int sendTimeout,
+    int receiveTimeout,
+    Map<String, dynamic> extra,
+    Map<String, dynamic> headers,
+    ResponseType responseType,
+    String contentType,
+    ValidateStatus validateStatus,
+    bool receiveDataWhenStatusError,
+    bool followRedirects,
+    int maxRedirects,
+    RequestEncoder requestEncoder,
+    ResponseDecoder responseDecoder,
+  }) {
+    _options = Options(
+      method: method ?? (_options.method ?? dio.options.method),
+      sendTimeout: sendTimeout ?? (_options.sendTimeout ?? dio.options.sendTimeout),
+      receiveTimeout: receiveTimeout ?? (_options.receiveTimeout ?? dio.options.receiveTimeout),
+      extra: extra ?? Map.from(_options.extra ?? dio.options.extra ?? {}),
+      headers: headers ?? Map.from(_options.headers ?? dio.options.headers ?? {}),
+      responseType: responseType ?? (_options.responseType ?? dio.options.responseType),
+      contentType: contentType ?? (_options.contentType ?? dio.options.contentType),
+      validateStatus: validateStatus ?? (_options.validateStatus ?? dio.options.validateStatus),
+      receiveDataWhenStatusError:
+      receiveDataWhenStatusError ?? (_options.receiveDataWhenStatusError ?? dio.options.receiveDataWhenStatusError),
+      followRedirects: followRedirects ?? (_options.followRedirects ?? dio.options.followRedirects),
+      maxRedirects: maxRedirects ?? (_options.maxRedirects ?? dio.options.maxRedirects),
+      requestEncoder: requestEncoder,
+      responseDecoder: responseDecoder ?? (_options.responseDecoder ?? dio.options.responseDecoder),
+    );
+  }
+
+  request (String url, {Map<String, dynamic> params, String method = 'POST', Map<String, dynamic> options, String tip = '',}) async {
     var response;
     if (method.toLowerCase() == 'get') {
       response = await dio.get(

@@ -15,7 +15,6 @@ class MyApp extends StatelessWidget {
       providers: <SingleChildCloneableWidget>[
         ChangeNotifierProvider.value(value: ThemeModel()),
         ChangeNotifierProvider.value(value: GithubUserModel()),
-//        ChangeNotifierProvider.value(value: LocaleModel()),
       ],
       child: Consumer<ThemeModel>(
         builder: (BuildContext context, themeModel, Widget child) {
